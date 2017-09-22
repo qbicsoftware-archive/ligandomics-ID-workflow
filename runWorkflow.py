@@ -31,6 +31,7 @@ fbo = float(ctd_params['fbo'])
 fdr = float(ctd_params['fdr'])
 num_hits = int(ctd_params['noh'])
 dmr = ctd_params['dmr']
+msLevels = ctd_params['ms_levels']
 
 logfilename = 'ligandomicsID_v2_0_workflow.logs'
 logfile = open(logfilename, 'w')
@@ -55,6 +56,10 @@ for mzml in mzmlFiles:
     idPath = mzml.replace('mzML', 'idXML')
 
     identifier = mzml.split('/')[-1].split('.')[0]
+
+    if ctd_params['centroided'] == 'false':
+        pickpeakcommand = 'PeakPickerHiRes -in {i} -out {o} -threads 20 -algorithm:ms_levels {m}'
+        subprocess.call(pickpeakcommand.format(i=mzml, o=mzml, m=msLevels).split(),stderr=logfile, stdout=logfile)
 
     commandComet = 'CometAdapter -in {i} -out {o} -threads 20 -database {d} -precursor_mass_tolerance {pmt} -fragment_bin_tolerance {fmt} -fragment_bin_offset {fbo} -num_hits {n} -digest_mass_range {dmr}'.format(i=mzml, o=idPath, d=fasta_decoy_path, pmt=pmt, fmt=fmt, fbo=fbo, n=num_hits, dmr=dmr) 
     subprocess.call(commandComet.split() + ["-fixed_modifications", "Carbamidomethyl (C)", "-variable_modifications", "Oxidation (M)", "-enzyme", "unspecific cleavage"],stderr=logfile, stdout=logfile)
