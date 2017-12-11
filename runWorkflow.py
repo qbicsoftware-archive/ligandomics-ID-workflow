@@ -35,6 +35,7 @@ fdr = float(ctd_params['fdr'])
 num_hits = int(ctd_params['noh'])
 dmr = ctd_params['dmr']
 msLevels = ctd_params['ms_levels']
+centroided = ctd_params['centroided']
 
 logfilename = 'ligandomicsID_v2_0_workflow.logs'
 logfile = open(logfilename, 'w')
@@ -69,7 +70,7 @@ for mzml in mzmlFiles:
     identifier = mzml.split('/')[-1].split('.')[0]
 
     #run peak picker if not centroided
-    if ctd_params['centroided'] == 'false':
+    if centroided == 'false':
         pickpeakcommand = 'PeakPickerHiRes -in {i} -out {o} -threads 20 -algorithm:ms_levels {m}'
         subprocess.call(pickpeakcommand.format(i=mzml, o=mzml, m=msLevels).split(),stderr=logfile, stdout=logfile)
 
