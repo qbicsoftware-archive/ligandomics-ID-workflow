@@ -104,7 +104,7 @@ for mzml in mzmlFiles:
 
     #calculate fdr
     idresult_fdr = os.path.join(result_path, identifer_for_file.replace('.idXML', '_fdr.idXML'))
-    falseDiscovery = 'FalseDiscoveryRate -in {f} -out {o} -threads 20 -algorithm:add_decoy_peptides -algorithm:use_all_hits'.format(f=idresult,o=idresult_fdr)
+    falseDiscovery = 'FalseDiscoveryRate -in {f} -out {o} -threads 20 -algorithm:add_decoy_peptides'.format(f=idresult,o=idresult_fdr)
     subprocess.call(falseDiscovery.split(),stderr=logfile, stdout=logfile)
 
     #extract Percolator Features with PSMFeatureExtractor
